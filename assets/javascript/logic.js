@@ -136,7 +136,9 @@ function calculation(){
   
   var share = total/data[0].entry.guest.length; // divide total by number of guest to get equal share.
   console.log("share amount is "+share)
+  $("#allocation").append("<p> The split even amount is $" +share+ "</p"); //html append to div for split even amount
   console.log(caldata[1].amount);
+  
   
   
   
@@ -158,7 +160,7 @@ function distribution (caldata, share){
   
 for(var i=0; i < caldata.length; i++ ){
   iuser = caldata[i].name;
-  iamount = parseInt(caldata[i].amount);
+  iamount = caldata[i].amount;
   console.log(iamount)
   
   if(iamount < share){
@@ -166,31 +168,33 @@ for(var i=0; i < caldata.length; i++ ){
     
     for(var x=0; x < caldata.length; x++){
       xuser = caldata[x].name;
-      xamount = parseInt(caldata[x].amount);
+      xamount = caldata[x].amount;
     
       
-      if(share < xamount){
-        let give=0
+    if(share < xamount && iamount !== share){
+       let give=0
 
-        give=share-iamount
-        console.log(give)
-       
-        console.log(caldata);
-
-        console.log(caldata[i].amount)
-
-        caldata[i].amount=iamount+give //adjust the value given.
-
-        console.log(caldata[i].amount)
-
-
+       give=share-iamount
+       console.log(give)
+		
+		if(give > xamount-share ){ //checks if give is will cause the x-user to be over otherwise get min.
+		give=xamount-share
+		}
+		        
+		console.log(JSON.stringify(caldata)); //logging before allocation
+		caldata[i].amount=iamount+give //adjust the value given.
         caldata[x].amount=xamount-give //adjust max value
-        console.log(xamount+" "+iamount);
-        iamount = parseInt(caldata[i].amount)
-        xamount = parseInt(caldata[x].amount)
+		
+        iamount = caldata[i].amount //updates value in object in iuser
+        xamount = caldata[x].amount //updates value in object in xuser
 
-        console.log(xamount+" "+iamount);
-        console.log(iuser+ " gives " +give+ " to "+xuser)
+        console.log(xamount+" "+iamount); //logging after allocation
+        console.log(iuser+ " gives " +give+ " to "+xuser);
+		
+		$("#allocation").append("<p>"+iuser+ " gives $" +give+ " to "+xuser+" making "+iuser+" at $"+iamount+" and "+xuser+" at "+xamount+"</p"); //html append to div allocation for which steps to take.
+
+		console.log(JSON.stringify(caldata));
+		
         }
       
       
@@ -226,5 +230,4 @@ function isInt(value) {
          !isNaN(parseInt(value, 10));
 }
     
-
 
