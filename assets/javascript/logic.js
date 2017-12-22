@@ -25,6 +25,21 @@ var users=[];
 
 
 
+$("#adduser").on("click", function() { //add user to entry
+  
+  let newuser="";
+  newuser = $("#adduserdata").val()
+  
+  userHtml='<div class="row"><div class="col-lg-6">'+newuser+'</div><div class="col-lg-6"><div class="input-group"></span><span class="input-group-addon">$</span><input id="'+newuser+'" type="text" class="form-control halps1" aria-label="Text input with checkbox" value=32 ></div></div></div>'
+  
+	console.log("add user "+newuser)
+ 
+
+	$("#users").append(userHtml)
+	
+});
+
+
 
 
 $("#submit").on("click", function() { //adding new entries to event
@@ -84,8 +99,8 @@ $("#submit").on("click", function() { //adding new entries to event
   
   console.log(data);
     //$(".form-control").val("");
-  
-  calculation();
+  let a=data.length-1
+  calculation(a);
   
 });
 
@@ -101,23 +116,26 @@ $("#submit").on("click", function() { //adding new entries to event
 
 
 
-function calculation(){
 
+
+
+function calculation(a){
+	
   var total=0;
   var guests = [];
-  console.log(data[0].entry.guest[0].amount)
+  console.log(data[a].entry.guest[0].amount)
   var guest;
   let x=0;
   var event;
   var entry;
   var caldata =[];
   
-  for(i=0; i < data[0].entry.guest.length; i++ ){ //grabs the sum of entry [0]
+  for(i=0; i < data[a].entry.guest.length; i++ ){ //grabs the sum of entry [0]
   
-  x = parseInt(data[0].entry.guest[i].amount);
-  guest =data[0].entry.guest[i].name; //grab user name
-  event = data[0].event        // event name
-  entry = data[0].entry.location; //location of entry
+  x = parseInt(data[a].entry.guest[i].amount);
+  guest =data[a].entry.guest[i].name; //grab user name
+  event = data[a].event        // event name
+  entry = data[a].entry.location; //location of entry
   console.log(guest + " has contributed $" +x+ " to event: " +event+ " at location " + entry +"."  )  //logging
 
  
@@ -134,9 +152,10 @@ function calculation(){
   
 
   
-  var share = total/data[0].entry.guest.length; // divide total by number of guest to get equal share.
+  var share = total/data[a].entry.guest.length; // divide total by number of guest to get equal share.
   console.log("share amount is "+share)
-  $("#allocation").append("<p> The split even amount is $" +share+ "</p"); //html append to div for split even amount
+	$("#allocation").empty()
+  $("#allocation").append("<p>For Location: "+entry+" The split even amount is $" +share+ "</p"); //html append to div for split even amount
   console.log(caldata[1].amount);
   
   
